@@ -1,4 +1,5 @@
-name: 自动更新实时汇率
+name: 自动同步实时汇率
+
 on:
   schedule:
     - cron: '0 0 * * *' # 每天北京时间上午8点运行
@@ -9,19 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: 抓取最新汇率
+
+      - name: 获取最新汇率并修改文件
         run: |
-          # 抓取 USD 到 CNY 的汇率
-          NEW_RATE=$(curl -s https://api.exchangerate-api.com/v4/latest/USD | jq '.rates.CNY')
-          echo "当前最新汇率: $NEW_RATE"
-          # 精准替换 index.html 中的默认值
-          sed -i "s/id=\"exchangeRate\" value=\"[0-9.]*\"/id=\"exchangeRate\" value=\"$NEW_RATE\"/g" index.html
-          
-      - name: 自动提交更新
+          # 1. 抓取汇率 (USD -> CNY)
+          # 使用 API 获取实时数据
+          RATE=$(curl -s https://api.exchangerate-api.com/v4/latest/USD | jq '.rates.CNY')
+          echo "检测到当前最新汇率: $RATE"
+
+          # 2. 精准匹配替换你 HTML 中的 value="7.2"
+          # 这个正则会锁定 id="exchangeRate" 之后的第一个 value 属性并更新它
+          sed -i "s/\(id=\"exchangeRate\"\s\+value=\"\)[^\"]*\"/\1$RATE\"/g" index.html
+
+      - name: 提交并推送到仓库
         run: |
           git config --global user.name "Exchange-Bot"
           git config --global user.email "bot@github.com"
           git add index.html
-          git commit -m "自动更新汇率: $(date)" || exit 0
+          # 只有当汇率真的变动时才提交，避免无效记录
+          git commit -m "自动更新实时汇率至: $RATE" || exit 0
           git push
