@@ -1,0 +1,27 @@
+name: 自动更新实时汇率
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天北京时间上午8点运行
+  workflow_dispatch: # 允许你手动点击按钮运行
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: 抓取最新汇率
+        run: |
+          # 抓取 USD 到 CNY 的汇率
+          NEW_RATE=$(curl -s https://api.exchangerate-api.com/v4/latest/USD | jq '.rates.CNY')
+          echo "当前最新汇率: $NEW_RATE"
+          # 精准替换 index.html 中的默认值
+          sed -i "s/id=\"exchangeRate\" value=\"[0-9.]*\"/id=\"exchangeRate\" value=\"$NEW_RATE\"/g" index.html
+          
+      - name: 自动提交更新
+        run: |
+          git config --global user.name "Exchange-Bot"
+          git config --global user.email "bot@github.com"
+          git add index.html
+          git commit -m "自动更新汇率: $(date)" || exit 0
+          git push
