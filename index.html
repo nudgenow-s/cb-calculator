@@ -6,114 +6,116 @@
     <title>Cost Calculator | 成本计算器</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #3498db;
-            --success-color: #27ae60;
-            --warning-color: #e67e22;
-            --danger-color: #e74c3c;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
+            --primary: #0f172a;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
         }
+
         body { 
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
-            background: var(--bg-color); 
-            color: var(--primary-color); 
-            display: flex; 
-            justify-content: center; 
-            padding: 40px 20px;
-            margin: 0;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+            background: var(--bg); 
+            color: var(--primary); 
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center;
         }
+
         .container { 
-            background: var(--card-bg); 
+            background: var(--card); 
             padding: 40px; 
-            border-radius: 16px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
-            width: 100%; 
-            max-width: 900px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
+            width: 100%; max-width: 1000px; 
         }
+
+        /* Top Bar */
         .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 20px;
         }
-        h1 { margin: 0; font-size: 1.5rem; color: var(--primary-color); }
+        h1 { margin: 0; font-size: 1.5rem; font-weight: 800; }
         
-        .btn-lang {
-            padding: 8px 16px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: opacity 0.2s;
+        .controls { display: flex; gap: 12px; }
+        .toggle-group { background: #f1f5f9; padding: 4px; border-radius: 12px; display: flex; }
+        .toggle-btn {
+            padding: 6px 16px; border: none; border-radius: 9px; cursor: pointer;
+            font-size: 0.85rem; font-weight: 600; background: transparent; color: #64748b; transition: 0.2s;
         }
-        .btn-lang:hover { opacity: 0.9; }
+        .toggle-btn.active { background: white; color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
+        /* Config Bar */
         .config-bar { 
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            background: #f1f7fe; 
-            padding: 20px; 
-            border-radius: 12px; 
-            margin-bottom: 30px; 
+            display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px;
+            background: #f8fafc; padding: 20px; border-radius: 16px; margin-bottom: 24px; align-items: center;
         }
-        .input-group { display: flex; align-items: center; gap: 10px; }
+        .config-item label { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 4px; font-weight: 600; }
         
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th { background: #f8f9fa; text-align: left; padding: 15px; font-size: 0.9rem; text-transform: uppercase; color: #7f8c8d; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
-        
-        input[type="number"] { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            transition: border-color 0.3s;
+        input, select {
+            border: 1px solid var(--border); background: white;
+            padding: 10px 12px; border-radius: 10px; font-size: 0.9rem; width: 100%; box-sizing: border-box;
         }
-        input[type="number"]:focus { outline: none; border-color: var(--accent-color); }
+        input:focus { outline: none; border-color: var(--accent); ring: 3px rgba(59,130,246,0.1); }
 
+        /* Table Area */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        th { text-align: left; padding: 12px; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; }
+
+        .btn-add {
+            width: 100%; padding: 12px; background: white; border: 2px dashed var(--border);
+            border-radius: 12px; color: #64748b; font-weight: 600; cursor: pointer; margin-bottom: 32px; transition: 0.2s;
+        }
+        .btn-add:hover { border-color: var(--accent); color: var(--accent); background: #eff6ff; }
+
+        .btn-del {
+            background: transparent; color: #cbd5e1; border: none; padding: 8px; cursor: pointer; font-size: 1.1rem;
+        }
+        .btn-del:hover { color: var(--danger); }
+
+        /* Summary Area */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .summary-card {
-            background: var(--primary-color);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            background: #f8fafc; padding: 24px; border-radius: 20px; border: 1px solid #f1f5f9;
         }
-        .summary-item { text-align: right; }
-        .summary-item label { display: block; font-size: 0.85rem; opacity: 0.8; margin-bottom: 5px; }
-        .summary-item .value { font-size: 1.2rem; font-weight: 600; }
-        .summary-item.highlight .value { color: #f1c40f; font-size: 1.8rem; }
+        .summary-card.highlight { background: var(--primary); color: white; grid-column: span 2; display: flex; justify-content: space-between; align-items: center; }
+        
+        .val-big { font-size: 1.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .highlight .val-big { font-size: 2.2rem; color: #fbbf24; }
+        .unit { margin-right: 4px; opacity: 0.6; font-weight: 400; }
 
-        .note { font-size: 0.85rem; color: #95a5a6; margin-top: 20px; text-align: center; }
+        .footer { margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 20px; color: #94a3b8; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-flex">
-        <h1 id="title">初创跨境企业成本核算表</h1>
-        <button class="btn-lang" onclick="toggleLang()" id="langBtn">English</button>
+        <h1 id="title">跨境企业成本核算</h1>
+        <div class="controls">
+            <div class="toggle-group">
+                <button class="toggle-btn active" onclick="setCurrency('CNY', this)">CNY</button>
+                <button class="toggle-btn" onclick="setCurrency('USD', this)">USD</button>
+            </div>
+            <button class="toggle-btn" style="background:#f1f5f9; margin-left:8px;" onclick="toggleLang()" id="langBtn">English</button>
+        </div>
     </div>
     
     <div class="config-bar">
-        <div class="input-group">
-            <strong id="labelRate">实时汇率：</strong>
-            <span>1 USD = <input type="number" id="exchangeRate" value="6.81124776" step="0.01" style="width: 80px;" oninput="calculateTotal()"> CNY</span>
+        <div class="config-item">
+            <label id="labelRate">实时汇率 (1 USD TO CNY)</label>
+            <input type="number" id="exchangeRate" value="6.81124776" step="0.0001" oninput="calculateTotal()">
         </div>
-        <div style="font-size: 0.8rem; color: #7f8c8d; margin-top: 5px;">
-    最后更新：<span id="lastUpdate">2026-05-08</span>
-</div>
-
-        <div class="input-group">
-            <strong id="labelRisk">风险储备金：</strong>
-            <span style="color: var(--warning-color); font-weight: bold;">+20%</span>
+        <div class="config-item">
+            <label id="labelRisk">风险储备金</label>
+            <div style="font-weight: 700; color: var(--warning); padding: 10px 0;">+20%</div>
+        </div>
+        <div class="config-item" style="text-align: right;">
+            <label>最后更新</label>
+            <div id="lastUpdate" style="padding: 10px 0; color: #64748b; font-size: 0.85rem;">2026-05-08</div>
         </div>
     </div>
 
@@ -121,147 +123,156 @@
         <thead>
             <tr>
                 <th width="35%" id="thItem">成本项目</th>
-                <th width="25%">USD</th>
-                <th width="25%">CNY</th>
-                <th width="15%" id="thSub" style="text-align: right;">小计 (CNY)</th>
+                <th width="15%" id="thFreq">频率</th>
+                <th width="20%">USD</th>
+                <th width="20%">CNY</th>
+                <th width="10%" style="text-align: right;" id="thSub">月小计</th>
             </tr>
         </thead>
-        <tbody id="costBody">
-            </tbody>
+        <tbody id="costBody"></tbody>
     </table>
 
-    <div class="summary-card">
-        <div class="summary-item">
-            <label id="labelBase">原始估算 (Base Total)</label>
-            <div class="value">¥ <span id="baseTotal">0.00</span></div>
+    <button class="btn-add" onclick="addRow()" id="addBtn">+ 新增项目</button>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <label id="labelBase" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">原始月度估算 (Base)</label>
+            <div class="val-big"><span class="curr-symbol">¥</span> <span id="baseTotal">0.00</span></div>
         </div>
-        <div class="summary-item">
-            <label id="labelReserve">风险储备金 (Risk Reserve 20%)</label>
-            <div class="value">¥ <span id="riskValue">0.00</span></div>
+        <div class="summary-card">
+            <label id="labelReserve" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">风险金 (Risk 20%)</label>
+            <div class="val-big" style="color: var(--warning);"><span class="curr-symbol">¥</span> <span id="riskValue">0.00</span></div>
         </div>
-        <div class="summary-item" style="grid-column: span 2; border-top: 1px solid rgba(255,255,255,0.1); pt-15; margin-top: 10px;">
-            <label id="labelGrand" style="margin-top: 10px;">预计总投入 (Final Budget)</label>
-            <div class="value highlight">¥ <span id="grandTotal">0.00</span></div>
+        <div class="summary-card highlight">
+            <div id="labelGrand" style="font-weight: 600;">月度最终预算 (Monthly Budget)</div>
+            <div class="val-big"><span class="curr-symbol">¥</span> <span id="grandTotal">0.00</span></div>
         </div>
     </div>
 
-    <div class="note" id="footerNote">
-        * 填写任意一列金额，另一列将自动根据汇率折算并计入总额。
+    <div class="footer">
+        © 2026 NudgeNow. Powered by GitHub Actions Logic.
     </div>
-
-    <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; text-align: center;">
-    <p style="font-size: 0.85rem; color: #95a5a6; margin-bottom: 8px;">
-        © 2026 NudgeNow. All Rights Reserved.
-    </p>
-    <p style="font-size: 0.9rem; color: #34495e;">
-        <span style="margin-right: 15px;">Powered by <strong>NudgeNow Logic</strong></span>
-        <a href="mailto:hi@nudgenow.xyz" style="color: #3498db; text-decoration: none; border-bottom: 1px solid #3498db; padding-bottom: 2px;">
-            Get in touch →
-        </a>
-    </p>
-</footer>
-
 </div>
 
 <script>
     let currentLang = 'zh';
-    const itemsData = [
-        { zh: "境外公司注册费用", en: "Overseas Registration" },
-        { zh: "境内公司注册费用", en: "Domestic Registration" },
-        { zh: "办公设备采购", en: "Office Equipment" },
-        { zh: "服务器租赁/服务费", en: "Server & Cloud Services" },
-        { zh: "域名注册及备案", en: "Domain & Filing" },
-        { zh: "网络环境搭建", en: "Network Infrastructure" },
-        { zh: "办公场地租金/押金", en: "Office Rent/Deposit" },
-        { zh: "市场推广预付款", en: "Marketing Prepayments" },
-        { zh: "其他杂项", en: "Miscellaneous" }
-    ];
+    let displayCurrency = 'CNY';
 
     const i18n = {
         zh: {
-            title: "初创跨境企业成本核算表",
-            labelRate: "实时汇率：",
-            labelRisk: "风险储备金：",
+            title: "跨境企业成本核算",
+            labelRate: "实时汇率 (1 USD TO CNY)",
+            labelRisk: "风险储备金",
             thItem: "成本项目",
-            thSub: "小计 (CNY)",
-            labelBase: "原始估算 (Base Total)",
-            labelReserve: "风险储备金 (20%)",
-            labelGrand: "预计总投入 (Final Budget)",
-            note: "* 填写任意一列金额，另一列将自动根据汇率折算并计入总额。"
+            thFreq: "频率",
+            thSub: "月小计",
+            labelBase: "原始月度估算",
+            labelReserve: "风险金 (20%)",
+            labelGrand: "月度最终预算 (Monthly Budget)",
+            addBtn: "+ 新增项目",
+            freqs: { 30: "日费用", 1: "月费用", "0.0833": "年费用" }
         },
         en: {
-            title: "Cross-border Startup Cost Calculator",
-            labelRate: "Exchange Rate:",
-            labelRisk: "Risk Reserve:",
+            title: "Cost Calculator",
+            labelRate: "Exchange Rate (USD/CNY)",
+            labelRisk: "Risk Reserve",
             thItem: "Expense Item",
-            thSub: "Subtotal (CNY)",
-            labelBase: "Base Estimated Total",
+            thFreq: "Freq",
+            thSub: "Monthly",
+            labelBase: "Base Monthly Total",
             labelReserve: "Risk Reserve (20%)",
-            labelGrand: "Final Budget Forecast",
-            note: "* Enter values in either column; the other will auto-convert based on the rate."
+            labelGrand: "Final Monthly Budget",
+            addBtn: "+ Add New Item",
+            freqs: { 30: "Daily", 1: "Monthly", "0.0833": "Yearly" }
         }
     };
 
-    function initTable() {
+    function addRow(name = "", usd = "", cny = "") {
         const body = document.getElementById('costBody');
-        body.innerHTML = itemsData.map((item, index) => `
-            <tr>
-                <td><strong class="item-name" data-index="${index}">${item.zh}</strong></td>
-                <td><input type="number" class="usd-input" placeholder="0.00" oninput="calculateTotal()"></td>
-                <td><input type="number" class="cny-input" placeholder="0.00" oninput="calculateTotal()"></td>
-                <td style="text-align: right; font-weight: 500;">¥ <span class="row-subtotal">0.00</span></td>
-            </tr>
-        `).join('');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" value="${name}" placeholder="项目名称..." class="row-name"></td>
+            <td>
+                <select class="freq-select" onchange="calculateTotal()">
+                    <option value="30">${i18n[currentLang].freqs[30]}</option>
+                    <option value="1" selected>${i18n[currentLang].freqs[1]}</option>
+                    <option value="0.0833">${i18n[currentLang].freqs["0.0833"]}</option>
+                </select>
+            </td>
+            <td><input type="number" class="usd-input" value="${usd}" placeholder="0" oninput="calculateTotal()"></td>
+            <td><input type="number" class="cny-input" value="${cny}" placeholder="0" oninput="calculateTotal()"></td>
+            <td style="text-align: right; font-weight: 700; font-family: monospace;">
+                <span class="row-subtotal">0.00</span>
+                <button class="btn-del" onclick="this.parentElement.parentElement.remove(); calculateTotal();">×</button>
+            </td>
+        `;
+        body.appendChild(tr);
+        calculateTotal();
+    }
+
+    function setCurrency(curr, btn) {
+        displayCurrency = curr;
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.curr-symbol').forEach(el => el.innerText = curr === 'CNY' ? '¥' : '$');
+        calculateTotal();
     }
 
     function toggleLang() {
         currentLang = currentLang === 'zh' ? 'en' : 'zh';
         document.getElementById('langBtn').innerText = currentLang === 'zh' ? 'English' : '中文';
-        
-        // Update static text
-        document.getElementById('title').innerText = i18n[currentLang].title;
-        document.getElementById('labelRate').innerText = i18n[currentLang].labelRate;
-        document.getElementById('labelRisk').innerText = i18n[currentLang].labelRisk;
-        document.getElementById('thItem').innerText = i18n[currentLang].thItem;
-        document.getElementById('thSub').innerText = i18n[currentLang].thSub;
-        document.getElementById('labelBase').innerText = i18n[currentLang].labelBase;
-        document.getElementById('labelReserve').innerText = i18n[currentLang].labelReserve;
-        document.getElementById('labelGrand').innerText = i18n[currentLang].labelGrand;
-        document.getElementById('footerNote').innerText = i18n[currentLang].note;
+        const d = i18n[currentLang];
+        document.getElementById('title').innerText = d.title;
+        document.getElementById('labelRate').innerText = d.labelRate;
+        document.getElementById('labelRisk').innerText = d.labelRisk;
+        document.getElementById('thItem').innerText = d.thItem;
+        document.getElementById('thFreq').innerText = d.thFreq;
+        document.getElementById('thSub').innerText = d.thSub;
+        document.getElementById('labelBase').innerText = d.labelBase;
+        document.getElementById('labelReserve').innerText = d.labelReserve;
+        document.getElementById('labelGrand').innerText = d.labelGrand;
+        document.getElementById('addBtn').innerText = d.addBtn;
 
-        // Update items
-        document.querySelectorAll('.item-name').forEach(el => {
-            const idx = el.getAttribute('data-index');
-            el.innerText = itemsData[idx][currentLang];
+        document.querySelectorAll('.freq-select').forEach(s => {
+            const v = s.value;
+            s.options[0].text = d.freqs[30];
+            s.options[1].text = d.freqs[1];
+            s.options[2].text = d.freqs["0.0833"];
+            s.value = v;
         });
     }
 
     function calculateTotal() {
-        const rate = parseFloat(document.getElementById('exchangeRate').value) || 0;
-        const usdInputs = document.querySelectorAll('.usd-input');
-        const cnyInputs = document.querySelectorAll('.cny-input');
-        const subtotals = document.querySelectorAll('.row-subtotal');
-        
-        let baseTotal = 0;
+        const rate = parseFloat(document.getElementById('exchangeRate').value) || 1;
+        const rows = document.querySelectorAll('#costBody tr');
+        let totalMonthlyCNY = 0;
 
-        usdInputs.forEach((input, i) => {
-            let usd = parseFloat(input.value) || 0;
-            let cny = parseFloat(cnyInputs[i].value) || 0;
-            let rowTotal = (usd * rate) + cny;
-            subtotals[i].innerText = rowTotal.toFixed(2);
-            baseTotal += rowTotal;
+        rows.forEach(row => {
+            const freq = parseFloat(row.querySelector('.freq-select').value);
+            const usd = parseFloat(row.querySelector('.usd-input').value) || 0;
+            const cny = parseFloat(row.querySelector('.cny-input').value) || 0;
+            
+            let monthlyRowCNY = ((usd * rate) + cny) * freq;
+            const displaySub = displayCurrency === 'CNY' ? monthlyRowCNY : (monthlyRowCNY / rate);
+            row.querySelector('.row-subtotal').innerText = displaySub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            totalMonthlyCNY += monthlyRowCNY;
         });
 
-        const riskReserve = baseTotal * 0.20;
-        const finalGrand = baseTotal + riskReserve;
-
-        document.getElementById('baseTotal').innerText = baseTotal.toLocaleString('zh-CN', {minimumFractionDigits: 2});
-        document.getElementById('riskValue').innerText = riskReserve.toLocaleString('zh-CN', {minimumFractionDigits: 2});
-        document.getElementById('grandTotal').innerText = finalGrand.toLocaleString('zh-CN', {minimumFractionDigits: 2});
+        const riskCNY = totalMonthlyCNY * 0.20;
+        const finalCNY = totalMonthlyCNY + riskCNY;
+        const factor = displayCurrency === 'CNY' ? 1 : (1 / rate);
+        
+        document.getElementById('baseTotal').innerText = (totalMonthlyCNY * factor).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('riskValue').innerText = (riskCNY * factor).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('grandTotal').innerText = (finalCNY * factor).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
-    initTable();
+    window.onload = () => {
+        // 初始示例行
+        addRow("境外公司注册", "1500", "");
+        addRow("云服务器托管", "", "300");
+    };
 </script>
-
 </body>
 </html>
